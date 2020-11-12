@@ -1,0 +1,98 @@
+---
+channels: [ LOG, DICTATION ]
+max-length: 200
+templates:
+    - match: 'https?://[^\s]+'
+      replace: 'a link'
+    - match: '([^\s\w:\-,.!()]|[_])*'
+      replace: ''
+schedule:
+    - time:
+        from: '7am'
+        to: '11pm'
+      status: ENABLED
+    - time:
+        from: '8:30am'
+        to: '9:15am'
+      status: DISABLED
+window:
+    - name: '.*- Discord$'
+      status: DISABLED
+    - name: '^Zoom Meeting$'
+      class: '^zoom$'sio
+      status: DISABLED
+camera:
+    - device: 0
+      available: no
+      status: DISABLED
+---
+name: 'Local system message service'
+channels: [ DICTATION ]
+max-length: 350
+templates:
+  - match: '(Broadcast message from .*) \(.*\) \(.*\):'
+    replace: '\1. '
+---
+name: 'discord'
+templates:
+  - match: '(.*), Text Channels :: (.*)'
+    replace: '\1 via Discord, \2'
+  - match: '(.*) \((.*), Text Channels\) :: (.*)'
+    replace: '\1 in \2 via Discord, \3'
+  - match: 'via Discord, Uploaded .*'
+    replace: 'uploaded the good stuff'
+schedule:
+  - time:
+      from: '3:30pm'
+      to: '11pm'
+    status: ENABLED
+---
+name: 'Evolution Reminders'
+templates:
+    - match: '(.*) :: .*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [AP]M \((.*)\)$'
+      replace: 'Reminder, you have \1 coming up, it is \2 long'
+---
+name: 'Konsole'
+channels: [ VOID ]
+---
+name: 'KDE Connect'
+match:
+  summary: '^MyAndroidPhone$'
+  body: '^Incoming call from Doorbell$'
+templates:
+  - match: '.*'
+    replace: 'Someone is at the door'
+---
+name: 'Slack'
+match:
+    summary: 'New message in '
+channels: [ DICTATION ]
+templates:
+    - match: '.* :: ([\w\s]+): uploaded this file'
+      replace: '\1 uploaded a file via Slack'
+    - match: '.* :: ([\w\s]+): (.*)'
+      replace: '\1 via Slack says \2'
+schedule:
+    - time:
+        from: '7am'
+        to: '4pm'
+      day:
+        from: MON
+        to: FRI
+      status: ENABLED
+---
+name: 'Linphone'
+match:
+  summary: 'Linphone'
+  body: '^We are transferred to \+?[\d]+'
+channels: [ LOG ]
+---
+name: 'Linphone'
+templates:
+    - match: '^(Call ended) :: .*'
+      replace: '\1'
+---
+name: 'Plasma Workspace'
+match:
+    summary: 'Clipboard history'
+channels: [ VOID ]
