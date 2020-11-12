@@ -19,7 +19,7 @@ window:
     - name: '.*- Discord$'
       status: DISABLED
     - name: '^Zoom Meeting$'
-      class: '^zoom$'sio
+      class: '^zoom$'
       status: DISABLED
 camera:
     - device: 0
