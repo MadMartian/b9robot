@@ -489,7 +489,7 @@ def load_configuration(target: EndpointProcessor):
 def configure_logging():
 	global announce
 	logging.config.fileConfig(
-		'/etc/persecrd/logging.conf',
+		'/etc/b9robot/logging.conf',
 		defaults = logging.basicConfig(
 			format = "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
 		)
