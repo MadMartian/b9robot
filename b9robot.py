@@ -303,7 +303,7 @@ class EndpointProcessor:
 
 	def enabled(self, definitions: List[AbstractMatchDefinition], default: List[AbstractMatchDefinition], fn):
 		all = MatchSet((default or []) + (definitions or []))
-		chosen = MatchSet(default if not definitions else definitions)
+		chosen = MatchSet((default if not definitions else definitions) or [])
 		return \
 			chosen is None or \
 			(chosen.enabled_in(fn) or chosen.implicitly_enabled_in()) and not all.disabled_in(fn)
