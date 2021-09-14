@@ -9,3 +9,4 @@ pygobject == 3.38.0
 xlib == 0.21
 html5lib == 1.1
 systemd-python == 234
+playsound == 1.3.0

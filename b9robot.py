@@ -24,6 +24,7 @@ from Xlib.display import Display, drawable
 from Xlib.error import BadWindow, CatchError
 from bs4 import BeautifulSoup
 import cv2
+from playsound import playsound
 
 Message = namedtuple('Message', 'name summary body')
 display = None
@@ -55,6 +56,14 @@ class MatchDefinition:
 				self.summary is None or self.summary.match(message.summary)) and (
 				self.body is None or self.body.match(message.body))
 
+
+class SoundEffect:
+	def __init__(self, source: AnyStr, delay: float = 0):
+		self.source = source
+		self.delay = delay
+
+	def play(self):
+		playsound(self.source)
 
 class Weekday(Enum):
 	SUN = 0
@@ -234,7 +243,8 @@ class EndpointDefinition:
 			match_definition: MatchDefinition = None,
 			schedule: List[ScheduleDefinition] = None,
 			windowing: List[WindowMatchDefinition] = None,
-			camera: List[VideoCapMatchDefinition] = None):
+			camera: List[VideoCapMatchDefinition] = None,
+			sound: SoundEffect = None):
 		self.name = name
 		self.max_len = max_len
 		self.channels = channels
@@ -243,6 +253,7 @@ class EndpointDefinition:
 		self.schedule = schedule
 		self.windowing = windowing
 		self.camera = camera
+		self.sound = sound
 
 	def empty(self):
 		return \
@@ -348,6 +359,7 @@ class EndpointProcessor:
 			original_text = "%s :: %s" % (message.summary, message.body)
 			plain = BeautifulSoup(original_text, "lxml")
 			text = self.apply_templates(endpoint.templates, plain.text)
+			sound = endpoint.sound
 			if endpoint.max_len is not None:
 				text = text[:endpoint.max_len]
 			channels = self.default.channels if not endpoint.channels else endpoint.channels
@@ -358,6 +370,8 @@ class EndpointProcessor:
 				announce.info(line)
 
 			if Channel.DICTATION in channels:
+				if sound is not None:
+					sound.play()
 				festival.sayText(text)
 
 			return True
@@ -415,6 +429,8 @@ def load_configuration(target: EndpointProcessor):
 			max_len = doc.get('max-length')
 			channels = list(map(lambda it: Channel[it], doc['channels'])) if 'channels' in doc else []
 			templates = []
+			sound = None
+
 			if 'match' in doc:
 				matching = doc['match']
 				match_definition = MatchDefinition(
@@ -479,7 +495,13 @@ def load_configuration(target: EndpointProcessor):
 				for elem in doc['templates']:
 					templates.append(TemplateReplacement(elem['match'], elem['replace']))
 
-			endpoint = EndpointDefinition(name, max_len, channels, templates, match_definition, schedule, window, camera)
+			if 'sound' in doc:
+				defn = doc['sound']
+				sound = SoundEffect(source = defn['source'], delay = defn['delay'] if 'delay' in defn else None)
+			else:
+				sound = None
+
+			endpoint = EndpointDefinition(name, max_len, channels, templates, match_definition, schedule, window, camera, sound)
 			if 'match' in doc or 'name' in doc:
 				target.add_endpoint(endpoint)
 			else:
