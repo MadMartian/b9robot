@@ -4,7 +4,7 @@ lxml == 4.6.2
 cronyo == 0.4.2
 dbus-python == 1.2.16
 opencv-python-headless == 4.4.0.42
-pyfestival == 0.5
+git+https://github.com/techiaith/pyfestival#festival
 pygobject == 3.38.0
 xlib == 0.21
 html5lib == 1.1
