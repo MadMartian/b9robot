@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import gi
 
@@ -422,7 +422,7 @@ def load_configuration(target: EndpointProcessor):
 		return x.tm_hour, x.tm_min
 
 	with open('/etc/b9robot/mappings.yaml') as f:
-		docs = yaml.load_all(f)
+		docs = yaml.safe_load_all(f)
 
 		for doc in docs:
 			name = doc.get('name')

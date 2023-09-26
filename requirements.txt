@@ -1,12 +1,12 @@
-PyYAML == 5.3.1
-beautifulsoup4 == 4.9.3
-lxml == 4.6.2
-cronyo == 0.4.2
-dbus-python == 1.2.16
-opencv-python-headless == 4.4.0.42
+opencv-python-headless >= 4.4.0.42, < 4.8.0
+PyYAML >= 5.3.1
+beautifulsoup4 >= 4.9.3
+lxml >= 4.6.2
+cronyo >= 0.4.2
+dbus-python >= 1.2.16
 git+https://github.com/techiaith/pyfestival#festival
-pygobject == 3.38.0
-xlib == 0.21
-html5lib == 1.1
-systemd-python == 234
-playsound == 1.3.0
+pygobject >= 3.38.0
+xlib >= 0.21
+html5lib >= 1.1
+systemd-python >= 234
+playsound >= 1.3.0
