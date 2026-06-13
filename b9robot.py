@@ -33,7 +33,8 @@ display = None
 class Channel(Enum):
 	LOG = 1
 	DICTATION = 2
-	VOID = 3
+	AUDIO = 3
+	VOID = 4
 
 
 class TemplateReplacement:
@@ -369,9 +370,10 @@ class EndpointProcessor:
 					"Received and transformed notification via '%s' - %s (was '%s')" % (message.name, text, original_text)
 				announce.info(line)
 
+			if Channel.AUDIO in channels and sound is not None:
+				sound.play()
+
 			if Channel.DICTATION in channels:
-				if sound is not None:
-					sound.play()
 				festival.sayText(text)
 
 			return True
