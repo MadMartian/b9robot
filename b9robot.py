@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 
 import gi
 
@@ -197,15 +198,20 @@ class CapAvailabilityMap:
 		self.dict = dict()
 
 	def get(self, index: int):
-		existing = self.dict.get(index)
-		if existing is None:
-			cap = cv2.VideoCapture("/dev/video%d" % index)
-			existing = cap is None or cap.isOpened()
-			self.dict[index] = existing
-			if cap.isOpened():
-				cap.release()
+		activated = self.dict.get(index)
+		if activated is None:
+			dev_path = "/dev/video%d" % index
+			if not os.path.exists(dev_path):
+				logging.warning("Device %d does not even exist! presuming this means it's inactive", index)
+				activated = False
+			else:
+				cap = cv2.VideoCapture(dev_path)
+				activated = not cap.isOpened()
+				if not activated:
+					cap.release()
+			self.dict[index] = activated
 				
-		return existing
+		return not activated
 
 	def clear(self):
 		self.dict.clear()
