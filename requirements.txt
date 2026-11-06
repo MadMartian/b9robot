@@ -5,7 +5,7 @@ lxml >= 4.6.2
 cronyo >= 0.4.2
 dbus-python >= 1.2.16
 git+https://github.com/techiaith/pyfestival#festival
-pygobject >= 3.38.0
+pygobject == 3.38.0
 xlib >= 0.21
 html5lib >= 1.1
 systemd-python >= 234

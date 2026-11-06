@@ -6,7 +6,7 @@ A configurable Python daemon that dictates system notification messages audibly 
 2.  ~~Python 3.6~~ *Python v10 is now supported*
 3.  Pip
 4.  VirtualEnv
-5.  All other dependencies are recorded in `requirements.txt`.  To install run `pip -r requirements.txt` from the repository root.
+5.  All other dependencies are recorded in `requirements.txt`.  To install run `pip install -r requirements.txt` from the repository root.
 
 # Install
 There is an install script that has been tested on Ubuntu 20.04 (Focal) and 22.04 (Jammy).  For other distributions I'm afraid you're on your own, I am not remotely responsible for the absolute mess that modern dependency management has become.  
